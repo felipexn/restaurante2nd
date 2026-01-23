@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contagem Regressiva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Courier New", monospace;
+    }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at top, #1a1a1a, #000);
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      padding: 40px;
+      border: 1px solid #333;
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
+      border-radius: 8px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+
+    .time {
+      font-size: 2.4rem;
+      color: #ff4d4d;
+      margin: 20px 0;
+      letter-spacing: 2px;
+    }
+
+    .small {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-top: 20px;
+    }
+
+    .ended {
+      color: #ff0000;
+      font-size: 1.5rem;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>
+      Você tem<br />
+      <span id="minutes">--</span> minutos<br />
+      para contar a história.<br />
+      Se não, não sou mais seu amigo.
+    </h1>
+
+    <div class="time" id="countdown">--:--:--</div>
+
+    <div class="small">
+      O tempo está passando...
+    </div>
+
+    <div class="ended" id="ended" style="display: none;">
+      Tempo esgotado.
+    </div>
+  </div>
+
+  <script>
+    // ==============================
+    // CONFIGURE AQUI A HORA FINAL
+    // ==============================
+    // Formato: "YYYY-MM-DD HH:MM:SS"
+    const targetTime = "2026-01-25 23:59:00";
+
+    const countdownEl = document.getElementById("countdown");
+    const minutesEl = document.getElementById("minutes");
+    const endedEl = document.getElementById("ended");
+
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date(targetTime.replace(" ", "T"));
+      const diff = target - now;
+
+      if (diff <= 0) {
+        countdownEl.textContent = "00:00:00";
+        minutesEl.textContent = "0";
+        endedEl.style.display = "block";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      countdownEl.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      minutesEl.textContent = Math.ceil(totalSeconds / 60);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
