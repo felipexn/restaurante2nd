@@ -5,12 +5,7 @@
   <title>Contagem Regressiva</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Courier New", monospace;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Courier New", monospace; }
 
     body {
       height: 100vh;
@@ -20,46 +15,97 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      overflow: hidden;
+    }
+
+    body.ended-state {
+      background: radial-gradient(circle at center, #2a0000, #000);
+      animation: pulseBg 2s infinite alternate;
+    }
+
+    @keyframes pulseBg {
+      from { filter: brightness(0.9); }
+      to { filter: brightness(1.2); }
     }
 
     .container {
+      position: relative;
       max-width: 700px;
       padding: 40px;
       border: 1px solid #333;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
       border-radius: 8px;
+      z-index: 2;
     }
 
-    h1 {
-      font-size: 1.6rem;
-      margin-bottom: 30px;
-      line-height: 1.4;
-    }
+    h1 { font-size: 1.6rem; margin-bottom: 30px; line-height: 1.4; }
 
     .time {
       font-size: 2.4rem;
       color: #ff4d4d;
       margin: 20px 0;
       letter-spacing: 2px;
+      animation: flicker 1.5s infinite;
     }
 
-    .small {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin-top: 20px;
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
     }
+
+    .small { font-size: 0.9rem; opacity: 0.7; margin-top: 20px; }
 
     .ended {
+      display: none;
       color: #ff0000;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-top: 30px;
+      animation: shake 0.6s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      50% { transform: translateX(2px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* FOGO */
+    .fire {
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      pointer-events: none;
+      display: none;
+      z-index: 1;
+    }
+
+    .flame {
+      position: absolute;
+      bottom: 0;
+      width: 20px;
+      height: 60px;
+      background: radial-gradient(circle, #ffeb3b 10%, #ff9800 40%, #ff0000 70%);
+      border-radius: 50% 50% 50% 50%;
+      animation: rise 1.2s infinite ease-in;
+      opacity: 0.8;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.9; }
+      100% { transform: translateY(-120px) scale(0.2); opacity: 0; }
     }
   </style>
 </head>
 <body>
+  <div class="fire" id="fire"></div>
+
   <div class="container">
-    <h1>
+    <h1 id="title">
       Você tem<br />
       <span id="minutes">--</span> minutos<br />
       para contar a história.<br />
@@ -68,13 +114,9 @@
 
     <div class="time" id="countdown">--:--:--</div>
 
-    <div class="small">
-      O tempo está passando...
-    </div>
+    <div class="small" id="small">O tempo está passando...</div>
 
-    <div class="ended" id="ended" style="display: none;">
-      Tempo esgotado.
-    </div>
+    <div class="ended" id="ended">Te odeio, Uchoa.<br />A amizade acabou.<br />Não fala mais comigo.</div>
   </div>
 
   <script>
@@ -87,6 +129,21 @@
     const countdownEl = document.getElementById("countdown");
     const minutesEl = document.getElementById("minutes");
     const endedEl = document.getElementById("ended");
+    const titleEl = document.getElementById("title");
+    const smallEl = document.getElementById("small");
+    const fireEl = document.getElementById("fire");
+
+    function spawnFire() {
+      fireEl.style.display = "block";
+      setInterval(() => {
+        const flame = document.createElement("div");
+        flame.className = "flame";
+        flame.style.left = Math.random() * 100 + "%";
+        flame.style.animationDuration = (0.8 + Math.random()) + "s";
+        fireEl.appendChild(flame);
+        setTimeout(() => flame.remove(), 1200);
+      }, 120);
+    }
 
     function updateCountdown() {
       const now = new Date();
@@ -97,6 +154,11 @@
         countdownEl.textContent = "00:00:00";
         minutesEl.textContent = "0";
         endedEl.style.display = "block";
+        titleEl.innerHTML = "Fim do prazo.";
+        smallEl.textContent = "Você teve sua chance.";
+        document.body.classList.add("ended-state");
+        spawnFire();
+        clearInterval(timer);
         return;
       }
 
@@ -110,7 +172,7 @@
     }
 
     updateCountdown();
-    setInterval(updateCountdown, 1000);
+    const timer = setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
