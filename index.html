@@ -1,178 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Contagem Regressiva</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurante 2ND</title>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Courier New", monospace; }
+    :root {
+      --bg: #f2e6d8;
+      --paper: #f7efe5;
+      --brown: #7a4a2e;
+      --dark: #2b1b12;
+      --accent: #b07a4a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Georgia", serif;
+    }
 
     body {
-      height: 100vh;
-      background: radial-gradient(circle at top, #1a1a1a, #000);
-      color: #e0e0e0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: var(--bg);
+      color: var(--dark);
+    }
+
+    header {
       text-align: center;
-      overflow: hidden;
+      padding: 2rem 1rem;
     }
 
-    body.ended-state {
-      background: radial-gradient(circle at center, #2a0000, #000);
-      animation: pulseBg 2s infinite alternate;
+    header h1 {
+      font-size: 2.2rem;
+      color: var(--brown);
     }
 
-    @keyframes pulseBg {
-      from { filter: brightness(0.9); }
-      to { filter: brightness(1.2); }
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      color: #555;
     }
 
     .container {
-      position: relative;
-      max-width: 700px;
-      padding: 40px;
-      border: 1px solid #333;
-      background: rgba(0, 0, 0, 0.65);
-      box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
-      border-radius: 8px;
-      z-index: 2;
+      max-width: 1000px;
+      margin: auto;
+      padding: 1rem;
     }
 
-    h1 { font-size: 1.6rem; margin-bottom: 30px; line-height: 1.4; }
-
-    .time {
-      font-size: 2.4rem;
-      color: #ff4d4d;
-      margin: 20px 0;
-      letter-spacing: 2px;
-      animation: flicker 1.5s infinite;
+    .cardapio {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
     }
 
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    .small { font-size: 0.9rem; opacity: 0.7; margin-top: 20px; }
-
-    .ended {
-      display: none;
-      color: #ff0000;
-      font-size: 1.6rem;
-      margin-top: 30px;
-      animation: shake 0.6s infinite;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-2px); }
-      50% { transform: translateX(2px); }
-      75% { transform: translateX(-2px); }
-      100% { transform: translateX(0); }
-    }
-
-    /* FOGO */
-    .fire {
-      position: absolute;
-      bottom: -20px;
-      left: 0;
+    .cardapio img {
       width: 100%;
-      height: 50%;
-      pointer-events: none;
-      display: none;
-      z-index: 1;
+      max-width: 420px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      background: var(--paper);
     }
 
-    .flame {
-      position: absolute;
-      bottom: 0;
-      width: 20px;
-      height: 60px;
-      background: radial-gradient(circle, #ffeb3b 10%, #ff9800 40%, #ff0000 70%);
-      border-radius: 50% 50% 50% 50%;
-      animation: rise 1.2s infinite ease-in;
-      opacity: 0.8;
+    .sobre {
+      background: var(--paper);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
-    @keyframes rise {
-      0% { transform: translateY(0) scale(1); opacity: 0.9; }
-      100% { transform: translateY(-120px) scale(0.2); opacity: 0; }
+    .sobre h2 {
+      color: var(--brown);
+      margin-bottom: 1rem;
+    }
+
+    .endereco {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 3rem 0;
+    }
+
+    .links a {
+      text-decoration: none;
+      padding: 0.9rem 1.4rem;
+      border-radius: 8px;
+      font-weight: bold;
+      color: white;
+      background: var(--brown);
+      transition: 0.3s;
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .links a:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    @media (min-width: 768px) {
+      header h1 {
+        font-size: 2.6rem;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="fire" id="fire"></div>
 
-  <div class="container">
-    <h1 id="title">
-      Você tem<br />
-      <span id="minutes">--</span> minutos<br />
-      para contar a história.<br />
-      Se não, não sou mais seu amigo.
-    </h1>
+  <header>
+    <h1>Restaurante 2ND</h1>
+    <p>Sabor, tradição e comida de verdade</p>
+  </header>
 
-    <div class="time" id="countdown">--:--:--</div>
+  <main class="container">
 
-    <div class="small" id="small">O tempo está passando...</div>
+    <div class="cardapio">
+      <img src="cardapio.png" alt="Cardápio do Restaurante 2ND">
+    </div>
 
-    <div class="ended" id="ended">Te odeio, Uchoa.<br />A amizade acabou.<br />Não fala mais comigo.</div>
-  </div>
+    <section class="sobre">
+      <h2>Sobre nós</h2>
+      <p>
+        O Restaurante 2ND traz o melhor da comida brasileira com aquele
+        tempero caseiro que conquista no primeiro prato.
+        Feijoada, carnes na chapa e bebidas geladas em um ambiente simples
+        e acolhedor.
+      </p>
 
-  <script>
-    // ==============================
-    // CONFIGURE AQUI A HORA FINAL
-    // ==============================
-    // Formato: "YYYY-MM-DD HH:MM:SS"
-    const targetTime = "2026-01-23 14:00:00";
+      <div class="endereco">
+        <strong>📍 Endereço:</strong><br>
+        Rod. Transamazônica, 23977-25497 - Amapá, Marabá - PA
+      </div>
+    </section>
 
-    const countdownEl = document.getElementById("countdown");
-    const minutesEl = document.getElementById("minutes");
-    const endedEl = document.getElementById("ended");
-    const titleEl = document.getElementById("title");
-    const smallEl = document.getElementById("small");
-    const fireEl = document.getElementById("fire");
+    <div class="links">
+      <a href="https://www.instagram.com/romariosouza2nd/" target="_blank">
+        📸 Instagram
+      </a>
 
-    function spawnFire() {
-      fireEl.style.display = "block";
-      setInterval(() => {
-        const flame = document.createElement("div");
-        flame.className = "flame";
-        flame.style.left = Math.random() * 100 + "%";
-        flame.style.animationDuration = (0.8 + Math.random()) + "s";
-        fireEl.appendChild(flame);
-        setTimeout(() => flame.remove(), 1200);
-      }, 120);
-    }
+      <a href="https://wa.me/559492675229" target="_blank">
+        💬 WhatsApp
+      </a>
 
-    function updateCountdown() {
-      const now = new Date();
-      const target = new Date(targetTime.replace(" ", "T"));
-      const diff = target - now;
+      <a href="https://www.google.com/maps/search/?api=1&query=Rod.+Transamazônica,+Marabá+-+PA" target="_blank">
+        🗺️ Como chegar
+      </a>
+    </div>
 
-      if (diff <= 0) {
-        countdownEl.textContent = "00:00:00";
-        minutesEl.textContent = "0";
-        endedEl.style.display = "block";
-        titleEl.innerHTML = "Fim do prazo.";
-        smallEl.textContent = "Você teve sua chance.";
-        document.body.classList.add("ended-state");
-        spawnFire();
-        clearInterval(timer);
-        return;
-      }
+  </main>
 
-      const totalSeconds = Math.floor(diff / 1000);
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
+  <footer>
+    © 2026 • Restaurante 2ND • Todos os direitos reservados
+  </footer>
 
-      countdownEl.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-      minutesEl.textContent = Math.ceil(totalSeconds / 60);
-    }
-
-    updateCountdown();
-    const timer = setInterval(updateCountdown, 1000);
-  </script>
 </body>
 </html>
